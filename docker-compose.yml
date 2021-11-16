@@ -1,0 +1,36 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:14.1
+    environment:
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_HOST_AUTH_METHOD: trust
+
+  server:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    environment:
+      HOST: '0.0.0.0'
+      RESOLVE_EVENT_STORE_DATABASE_NAME: 'event-store'
+      RESOLVE_EVENT_STORE_CLUSTER_HOST: 'postgres'
+      RESOLVE_EVENT_STORE_CLUSTER_PORT: '5432'
+      RESOLVE_READMODEL_DATABASE_NAME: 'read-model'
+      RESOLVE_READMODEL_CLUSTER_HOST: 'postgres'
+      RESOLVE_READMODEL_CLUSTER_PORT: '5432'
+      RESOLVE_USER_ID: 'postgres'
+      RESOLVE_USER_PASSWORD: 'postgres'
+    depends_on:
+      - postgres
+
+  nginx:
+    image: nginx:1.17
+    ports:
+      - '8080:80'
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+
+networks:
+  default:
+    driver: bridge
+    name: hacker-news
