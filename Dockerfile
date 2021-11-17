@@ -1,4 +1,4 @@
-FROM node:14.17-alpine
+FROM node:14.17-alpine as build
 
 WORKDIR /src
 
@@ -29,6 +29,20 @@ COPY static static
 
 RUN yarn build
 
+FROM node:14.17-alpine as dependencies
+
+WORKDIR /src
+
+COPY package.json package.json
+
+RUN yarn install --ignore-scripts --production
+
+FROM node:14.17-alpine
+
+COPY static static
+COPY --from=dependencies /src .
+COPY --from=build /src/dist dist
+
 EXPOSE 3000
 
-CMD ["yarn", "start"]
+CMD ["node", "dist/common/local-entry/local-entry.js"]
