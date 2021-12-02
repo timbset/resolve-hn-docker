@@ -71,3 +71,5 @@ code.zip
 static.zip
 
 .imp-exp-test
+
+volumes/postgres/data/*
