@@ -9,8 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build and push
-        uses: docker/build-push-action@v2
+      - name: Build postgresql
+        run: docker-compose up -d postgres
+
+      - name: Wait for postgresql initialization
+        uses: whatnick/wait-action@master
         with:
-          context: .
-          tags: test-app:latest
+          time: '30s'
+
+      - name: Build and run all containers postgresql
+        run: docker-compose up -d
