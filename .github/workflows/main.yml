@@ -9,12 +9,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build postgresql
+      - name: Run postgres container for the first start intialization
         run: docker-compose up -d postgres
 
 #     Here must be 20 secs delay for postgres initialization, but server image building spends more time
 
-      - name: Build and run all containers postgresql
+      - name: Build and run all containers
         run: docker-compose up -d
 
       - name: Wait for server is started
