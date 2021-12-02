@@ -12,10 +12,7 @@ jobs:
       - name: Build postgresql
         run: docker-compose up -d postgres
 
-      - name: Wait for postgresql initialization
-        uses: whatnick/wait-action@master
-        with:
-          time: '30s'
+#     Here must be 20 secs delay for postgres initialization, but server image building spends more time
 
       - name: Build and run all containers postgresql
         run: docker-compose up -d
