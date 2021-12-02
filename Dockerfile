@@ -1,3 +1,4 @@
+# Build stage: install all dependencies and build app
 FROM node:14.17-alpine as build
 
 WORKDIR /src
@@ -29,6 +30,7 @@ COPY static static
 
 RUN yarn build
 
+# Dependencies stage: install production dependencies
 FROM node:14.17-alpine as dependencies
 
 WORKDIR /src
@@ -37,6 +39,7 @@ COPY package.json package.json
 
 RUN yarn install --ignore-scripts --production
 
+# Main stage: copy production dependencies, build and static files
 FROM node:14.17-alpine
 
 COPY static static
