@@ -19,3 +19,6 @@ jobs:
 
       - name: Build and run all containers postgresql
         run: docker-compose up -d
+
+      - name: Check that server is running
+        run: curl -f -LI http://localhost:8080
